@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Set a gradient background for a fresh, modern look */
+        body {
+            background: linear-gradient(135deg, #4c9f70, #a0d8b3);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1em;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        main {
+            padding: 30px;
+            margin: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #333;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        input, select {
+            padding: 12px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="datetime-local"]:focus, select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+        }
+
+        #quizList, #accessLogs {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-entry {
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: #e0f7fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <a href="index.html"><button>Logout</button></a>
+    </header>
+    <main>
+        <!-- Manage Users Section -->
+        <section id="manageUsers">
+            <h2>Manage Users</h2>
+            <form id="manageUsersForm">
+                <label for="userType">User Type:</label>
+                <select id="userType">
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                </select>
+                
+                <label for="userName">User Name:</label>
+                <input type="text" id="userName" required>
+                
+                <label for="userClass">Class:</label>
+                <input type="text" id="userClass" required>
+                
+                <button type="button" onclick="openUserWindow()">Add User</button>
+            </form>
+        </section>
+
+        <!-- Manage Quizzes Section -->
+        <section id="manageQuizzes">
+            <h2>Manage Quizzes</h2>
+            <form id="quizForm">
+                <label for="quizName">Quiz Name:</label>
+                <input type="text" id="quizName" required>
+
+                <label for="quizClass">Class:</label>
+                <input type="text" id="quizClass" required>
+
+                <label for="quizDeadline">Deadline:</label>
+                <input type="datetime-local" id="quizDeadline" required>
+
+                <button type="button" onclick="openQuizManagementWindow()">Manage Quiz</button>
+            </form>
+
+            <div id="quizList">
+                <h3>Existing Quizzes</h3>
+                <!-- Quiz details will be shown here dynamically -->
+            </div>
+        </section>
+
+        <!-- Troubleshoot Access Section -->
+        <section id="troubleshootAccess">
+            <h2>Troubleshoot Access Issues</h2>
+            <form id="accessForm">
+                <label for="userEmail">User Email:</label>
+                <input type="email" id="userEmail" required>
+                
+                <label for="issueType">Issue Type:</label>
+                <select id="issueType">
+                    <option value="login">Login Issue</option>
+                    <option value="access">Access Rights</option>
+                </select>
+                
+                <button type="button" onclick="openAccessWindow()">Resolve Issue</button>
+            </form>
+            <div id="accessLogs">
+                <h3>Access Logs</h3>
+                <!-- Logs of access troubleshooting will be displayed here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Function to open the new window for adding user with background color
+        function openUserWindow() {
+            const userType = document.getElementById('userType').value;
+            const userName = document.getElementById('userName').value;
+            const userClass = document.getElementById('userClass').value;
+            const newWindow = window.open('', '_blank', 'width=800,height=600');
+            newWindow.document.write(`
+                <html>
+                <head><title>Add User</title></head>
+                <body style="background-color: #f0f8ff; font-family: Arial, sans-serif;">
+                    <h1>New User Added</h1>
+                    <p><strong>Type:</strong> ${userType}</p>
+                    <p><strong>Name:</strong> ${userName}</p>
+                    <p><strong>Class:</strong> ${userClass}</p>
+                </body>
+                </html>
+            `);
+        }
+
+        // Function to open the new window for managing quiz details with background color
+        function openQuizManagementWindow() {
+            const quizName = document.getElementById('quizName').value;
+            const quizClass = document.getElementById('quizClass').value;
+            const quizDeadline = document.getElementById('quizDeadline').value;
+            const newWindow = window.open('', '_blank', 'width=800,height=600');
+            newWindow.document.write(`
+                <html>
+                <head><title>Quiz Management</title></head>
+                <body style="background-color: #e9f7f5; font-family: Arial, sans-serif;">
+                    <h1>Quiz Management</h1>
+                    <p><strong>Quiz Name:</strong> ${quizName}</p>
+                    <p><strong>Class:</strong> ${quizClass}</p>
+                    <p><strong>Deadline:</strong> ${quizDeadline}</p>
+                </body>
+                </html>
+            `);
+        }
+
+        // Function to open the new window for resolving access issues with background color
+        function openAccessWindow() {
+            const userEmail = document.getElementById('userEmail').value;
+            const issueType = document.getElementById('issueType').value;
+            const newWindow = window.open('', '_blank', 'width=800,height=600');
+            newWindow.document.write(`
+                <html>
+                <head><title>Access Issue</title></head>
+                <body style="background-color: #f5f5f5; font-family: Arial, sans-serif;">
+                    <h1>Access Issue Details</h1>
+                    <p><strong>Email:</strong> ${userEmail}</p>
+                    <p><strong>Issue:</strong> ${issueType}</p>
+                    <p>Status: Issue is being resolved...</p>
+                </body>
+                </html>
+            `);
+        }
+    </script>
+</body>
+</html>

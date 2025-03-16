@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            color: white;
+            text-align: center;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            font-size: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Buttons */
+        button {
+            background: #ffcc00;
+            color: black;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ffaa00;
+        }
+
+        /* Input Fields */
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            padding: 10px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Teacher Dashboard</h2>
+
+        <label for="classSelect">Select Class:</label>
+        <select id="classSelect">
+            <option value="class1">Class 1</option>
+            <option value="class2">Class 2</option>
+            <option value="class3">Class 3</option>
+            <option value="class4">Class 4</option>
+            <option value="class5">Class 5</option>
+            <option value="class6">Class 6</option>
+            <option value="class7">Class 7</option>
+        </select>
+        
+        <label for="quizTitle">Quiz Title:</label>
+        <input type="text" id="quizTitle" placeholder="Enter quiz title">
+        
+        <label for="deadline">Deadline:</label>
+        <input type="datetime-local" id="deadline">
+        
+        <label for="questionFormat">Question Format:</label>
+        <select id="questionFormat">
+            <option value="mcq">Multiple Choice</option>
+            <option value="truefalse">True/False</option>
+            <option value="short">Short Answer</option>
+        </select>
+        
+        <label for="timeLimit">Time Limit (min):</label>
+        <input type="number" id="timeLimit" min="1" max="120">
+        
+        <button onclick="createQuiz()">Create Quiz</button>
+    </div>
+
+    <script>
+        function createQuiz() {
+            let classSelected = document.getElementById("classSelect").value;
+            let quizTitle = document.getElementById("quizTitle").value;
+            let deadline = document.getElementById("deadline").value;
+            let questionFormat = document.getElementById("questionFormat").value;
+            let timeLimit = document.getElementById("timeLimit").value;
+            
+            if (!quizTitle || !deadline || !timeLimit) {
+                alert("Please fill all fields");
+                return;
+            }
+
+            // Displaying quiz details
+            alert(`Quiz Created:
+Class: ${classSelected}
+Title: ${quizTitle}
+Deadline: ${deadline}
+Format: ${questionFormat}
+Time Limit: ${timeLimit} min`);
+
+            // Change background color after creating quiz
+            document.body.style.background = "#f39c12"; // Change to your desired background color
+
+            // Open a new window for adding questions
+            let newWindow = window.open('', '_blank', 'width=800,height=600'); // Open a blank window
+            newWindow.document.write('<h2>Add Questions to Your Quiz</h2>');
+            newWindow.document.write(`<p><strong>Class:</strong> ${classSelected}</p>`);
+            newWindow.document.write(`<p><strong>Title:</strong> ${quizTitle}</p>`);
+            newWindow.document.write(`<p><strong>Deadline:</strong> ${deadline}</p>`);
+            newWindow.document.write(`<p><strong>Question Format:</strong> ${questionFormat}</p>`);
+            newWindow.document.write(`<p><strong>Time Limit:</strong> ${timeLimit} min</p>`);
+            
+            // Question form
+            newWindow.document.write(`
+                <div class="question-container">
+                    <h3>Enter Question Details</h3>
+                    <label for="questionText">Question Text:</label>
+                    <textarea id="questionText" rows="4" placeholder="Enter the question text"></textarea>
+
+                    <label for="option1">Option 1:</label>
+                    <input type="text" id="option1" placeholder="Enter option 1">
+
+                    <label for="option2">Option 2:</label>
+                    <input type="text" id="option2" placeholder="Enter option 2">
+
+                    <label for="option3">Option 3:</label>
+                    <input type="text" id="option3" placeholder="Enter option 3">
+
+                    <label for="option4">Option 4:</label>
+                    <input type="text" id="option4" placeholder="Enter option 4">
+
+                    <label for="correctOption">Correct Option (1-4):</label>
+                    <input type="number" id="correctOption" min="1" max="4" placeholder="Enter correct option number">
+
+                    <button onclick="saveQuestion()">Save Question</button>
+                </div>
+            `);
+
+            // Attach the saveQuestion function to the new window after it's written
+            newWindow.saveQuestion = function() {
+                let questionText = newWindow.document.getElementById('questionText').value;
+                let option1 = newWindow.document.getElementById('option1').value;
+                let option2 = newWindow.document.getElementById('option2').value;
+                let option3 = newWindow.document.getElementById('option3').value;
+                let option4 = newWindow.document.getElementById('option4').value;
+                let correctOption = newWindow.document.getElementById('correctOption').value;
+
+                if (!questionText || !option1 || !option2 || !option3 || !option4 || !correctOption) {
+                    alert('Please fill all question fields');
+                    return;
+                }
+
+                alert('Question Saved!\n' +
+                    'Question: ' + questionText + '\n' +
+                    'Options: \n' +
+                    '1. ' + option1 + '\n' +
+                    '2. ' + option2 + '\n' +
+                    '3. ' + option3 + '\n' +
+                    '4. ' + option4 + '\n' +
+                    'Correct Option: ' + correctOption);
+            }
+        }
+    </script>
+</body>
+</html>

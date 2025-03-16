@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-weight: bold;
+        }
+
+        .option {
+            margin: 10px 0;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .submitted {
+            background-color: #ccc;
+            pointer-events: none;
+        }
+
+        .message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .timer {
+            font-size: 16px;
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Dashboard</h1>
+    </header>
+    <main>
+        <div class="container" id="dashboardContainer">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" required placeholder="Enter your Student ID">
+                <button type="submit">Login</button>
+                <p id="errorMessage" class="error"></p>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Sample saved questions entered by the teacher (removed the 3rd question)
+        const savedQuestions = [
+            { question: "What is 2 + 2?", options: ["3", "4", "5", "6"] },
+            { question: "Is the sky blue?", options: ["Yes", "No"] }
+        ];
+
+        // This will store the student's selected answers
+        let studentAnswers = [];
+
+        // Track if a quiz is ongoing
+        let ongoingQuiz = false;
+        let quizStartTime = null;
+        let quizEndTime = null;
+
+        // Function to start a new quiz
+        function startNewQuiz() {
+            ongoingQuiz = true;
+            quizStartTime = new Date();
+            quizEndTime = new Date(quizStartTime.getTime() + 5 * 60 * 1000); // 5 minutes from now
+            alert("The quiz has started!");
+
+            // Start the timer
+            updateTimer();
+        }
+
+        // Function to update the quiz timer
+        function updateTimer() {
+            if (!ongoingQuiz) return;
+            const currentTime = new Date();
+            const remainingTime = quizEndTime - currentTime;
+
+            if (remainingTime <= 0) {
+                alert("Quiz time is over!");
+                ongoingQuiz = false;
+                document.getElementById('quizTimer').textContent = "";
+            } else {
+                const minutes = Math.floor(remainingTime / 60000);
+                const seconds = Math.floor((remainingTime % 60000) / 1000);
+                document.getElementById('quizTimer').textContent = `Time remaining: ${minutes}m ${seconds}s`;
+                setTimeout(updateTimer, 1000);
+            }
+        }
+
+        // Function to open a new window and display the saved questions
+        function openSavedQuestions() {
+            let dashboardContainer = document.getElementById('dashboardContainer');
+            dashboardContainer.innerHTML = "";
+
+            // If a quiz is ongoing, show the timer and no "Start Quiz" button
+            if (ongoingQuiz) {
+                const timerElement = document.createElement("div");
+                timerElement.id = "quizTimer";
+                timerElement.classList.add("timer");
+                dashboardContainer.appendChild(timerElement);
+                updateTimer(); // Start the timer
+
+            } else {
+                const startButton = document.createElement("button");
+                startButton.textContent = "Start Quiz";
+                startButton.onclick = startNewQuiz;
+                dashboardContainer.appendChild(startButton);
+            }
+        }
+
+        // Event listener for the form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from submitting
+
+            let studentId = document.getElementById('studentId').value;
+            let errorMessage = document.getElementById('errorMessage');
+
+            // Check if Student ID is empty
+            if (studentId.trim() === '') {
+                errorMessage.textContent = "Student ID is required!";
+                return;
+            }
+
+            // Simulate a successful login
+            alert("Welcome, " + studentId + "!");
+
+            // Open the saved questions or the start quiz button
+            openSavedQuestions();
+        });
+    </script>
+</body>
+</html>

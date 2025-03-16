@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Management App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Quiz Management App</h1>
+    </header>
+    <main>
+        <section id="admin">
+            <h2>Admin Dashboard</h2>
+            <!-- Buttons to navigate to different dashboards -->
+            <button onclick="openPage('admin.html')">Go to Admin Dashboard</button>
+            <button onclick="openPage('teacher.html')">Go to Teacher Dashboard</button>
+            <button onclick="openPage('student.html')">Go to Student Dashboard</button>
+        </section>
+    </main>
+    <script>
+        function openPage(page) {
+            window.open(page, '_blank', 'width=800,height=600');
+        }
+    </script>
+</body>
+</html>

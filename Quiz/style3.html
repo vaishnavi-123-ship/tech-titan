@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Teacher Dashboard</h1>
+        <a href="index.html"><button>Logout</button></a>
+    </header>
+    <main>
+        <h2>Create a Quiz</h2>
+        <form id="quizForm">
+            <label for="quizTitle">Quiz Title:</label>
+            <input type="text" id="quizTitle" required>
+            
+            <label for="deadline">Deadline:</label>
+            <input type="date" id="deadline" required>
+
+            <label for="questionFormat">Question Format:</label>
+            <select id="questionFormat">
+                <option value="mcq">Multiple Choice</option>
+                <option value="short">Short Answer</option>
+            </select>
+
+            <button type="submit">Create Quiz</button>
+        </form>
+    </main>
+</body>
+</html>
